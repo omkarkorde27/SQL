@@ -12,4 +12,5 @@ Prerequisites
 To run the SQL queries in this repository, you need to have the following installed:
 
 MySQL Server
+
 MySQL Workbench
