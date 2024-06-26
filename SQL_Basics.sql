@@ -45,6 +45,9 @@ primary key(eid)
 
 /* ALTER query */
 alter table employee rename column Salary to SalaryinCTC; 
+alter table employee add Age int;
+alter table employee drop column Age;
+alter table employee modify column eid int not null;
 
 insert into employee values(1, 'Janhavi', 'Capgemini', 'Pune', 'Analyst', '425000');
 insert into employee values(2, 'Hrishikesh', 'Nomura', 'Powai', 'Java Developer', '1250000');
@@ -64,13 +67,19 @@ select sum(SalaryinCTC) from employee;
 select Ename, Company, SalaryinCTC from employee where SalaryinCTC = (SELECT min(SalaryinCTC) from employee);
 select Ename, Company, SalaryinCTC from employee where SalaryinCTC = (SELECT max(SalaryinCTC) from employee);
 
-/* GROUP BY clause */
-select count(eid), City from employee group by City;
+/* UPDATE query */
+update employee set Ename = 'Priyanka', Company = 'APL Logistics', City = 'Scottsdale', SalaryinCTC = 4500000 where eid = 5;
+update employee set Position = 'CRM Data Analyst' where eid = 5;
+select * from employee;
 
-/* GROUP BY and HAVING clause */
-select eid, Ename, Company, SalaryinCTC from employee group by eid having SalaryinCTC>1000000;
+/* DELETE query */
+delete from employee where eid = 1;
+select * from employee;
 
-/* ORDER BY clasuse */
-select Ename, SalaryinCTC from employee group by eid order by SalaryinCTC desc;
+
+
+
+
+
 
 
