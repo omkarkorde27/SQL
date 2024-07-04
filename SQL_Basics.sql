@@ -1,7 +1,11 @@
 show databases;
 use edureka;
 
-/* CREATE query */
+/* DDL commands 
+1. CREATE
+2. ALTER
+3. DROP */
+
 create table emp(
 id int not null auto_increment,
 ename varchar(20),
@@ -11,6 +15,15 @@ city varchar(20),
 phoneno int,
 primary key(id));
 
+/* 2. ALTER query */
+alter table employee rename column Salary to SalaryinCTC; 
+alter table employee add Age int;
+alter table employee drop column Age;
+alter table employee modify column eid int not null;
+
+/* 3. DROP query */
+drop table emp;
+
 show tables;
 
 /* INSERT query */
@@ -19,62 +32,95 @@ insert into emp values(102, 'Hrishi', 'Patil', 'Sarovar Darshan TMC Office', 'Th
 insert into emp values(103, 'Surabhi', 'Tambe', 'Shubhkamana CHS', 'Nahur', 92396686);
 insert into emp values(104, 'Dhananjay', 'Pai', 'Rambaug', 'Kalyan', 78396686);
 insert into emp values(105, 'Govind', 'Tiwari', 'Mulund check naka', 'Mulund', 75396686);
-insert into emp(id, ename, lname, address, city) values(106, 'Janhavi', 'Khanvilkar', 'Raj Legacy', 'Vikhroli');
+insert into emp(first_name, last_name) values('Janhavi', 'Khanvilkar');
 
 /* SELECT query */
 select * from emp;
 
-/* WHERE, AND, OR, NOT clauses */
-select * from emp where city = 'Kalyan';
-select id, ename, lname, address, city from emp;
-select * from emp where ename = "Omkar" and lname = "Korade";
-select * from emp where ename = "Govind" or city = "Kalyan";
-select * from emp where not city = "Kalyan";
-
-select * from emp;
-
-create table employee(
-eid int not null auto_increment,
-Ename varchar(20),
-Company varchar(20),
-City varchar(20),
-Position varchar(20),
-Salary int,
-primary key(eid)
+/* Various constraints 
+1. NOT NULL
+2. UNIQUE
+3. PRIMARY KEY
+4. FOREIGN KEY
+5. CHECK */
+/* alternative way to make a column as primary key */
+create table emp(
+emp_id int,
+first_name varchar(255),
+last_name varchar(255),
+constraint emp_pk primary key (emp_id)
 );
 
-/* ALTER query */
-alter table employee rename column Salary to SalaryinCTC; 
-alter table employee add Age int;
-alter table employee drop column Age;
-alter table employee modify column eid int not null;
+/* Advantage of creating the primary key using the alternative way is that you can have more than one columns in one primary key 
+whereas you cannot do it in the 1st method. */
+create table emp1(
+emp_id int,
+first_name varchar(255),
+last_name varchar(255),
+constraint emp_pk primary key (first_name, last_name)
+);
 
-insert into employee values(1, 'Janhavi', 'Capgemini', 'Pune', 'Analyst', '425000');
-insert into employee values(2, 'Hrishikesh', 'Nomura', 'Powai', 'Java Developer', '1250000');
-insert into employee values(3, 'Dhananjay', 'Nomura', 'Powai', 'Python Developer', '1250000');
-insert into employee values(4, 'Govind', 'Deloitte USI', 'Powai', 'Analyst', '775000');
-insert into employee values(5, 'Vallari', 'Capgemini', 'Pune', 'Software Engineer', '425000');
+insert into emp1(first_name, last_name) values('Janhavi', 'Khanvilkar');
 
-/* Aggregate functions
-1. Count
-2. Sum
-3. Average
-4. Minimum
-5. Maximum */
-select count(eid) from employee;
-select avg(SalaryinCTC) from employee;
-select sum(SalaryinCTC) from employee;
-select Ename, Company, SalaryinCTC from employee where SalaryinCTC = (SELECT min(SalaryinCTC) from employee);
-select Ename, Company, SalaryinCTC from employee where SalaryinCTC = (SELECT max(SalaryinCTC) from employee);
+create table emp2(
+emp_id int not null,
+first_name varchar(255) not null,
+last_name varchar(255)
+);
+/* Adding constraint after creating the table */
+alter table emp2 add constraint emp_key primary key (emp_id);
 
-/* UPDATE query */
-update employee set Ename = 'Priyanka', Company = 'APL Logistics', City = 'Scottsdale', SalaryinCTC = 4500000 where eid = 5;
-update employee set Position = 'CRM Data Analyst' where eid = 5;
-select * from employee;
+create table product(
+prod_id int primary key,
+product_name varchar(255),
+category varchar(255)
+);
 
-/* DELETE query */
-delete from employee where eid = 1;
-select * from employee;
+alter table product modify column product_name varchar(255) not null;
+
+create table orders(
+order_id int primary key,
+prod_id int not null,
+quantity int not null,
+constraint fk_prod_id foreign key (prod_id) references product (prod_id)
+); 
+
+/* creating foreign key after the creation of the tables */
+create table product1(
+prod_id int primary key,
+product_name varchar(255),
+category varchar(255)
+);
+create table orders1(
+order_id int primary key,
+prod_id int not null,
+quantity int not null
+); 
+
+/* Adding constraint to existing table */
+alter table orders1 add constraint fk_prod_id1 foreign key (prod_id) references product1 (prod_id);
+
+/* if you try to delete the data from the parent table which is referenced by the child table it will throw you an error 
+hence, to avoid this error use ON delete cascade which deletes the data from both the tables
+so, it is a good practice to add ON DELETE CASCADE while creating the foreign key */
+create table product2(
+prod_id int primary key,
+product_name varchar(255),
+category varchar(255)
+);
+create table orders2(
+order_id int primary key,
+prod_id int not null,
+quantity int not null,
+constraint fk_prod_id2 foreign key (prod_id) references product (prod_id) on delete cascade
+);
+/* Drop constraint of an existing table */
+alter table orders2 drop constraint fk_prod_id2;
+
+
+
+
+
 
 
 
